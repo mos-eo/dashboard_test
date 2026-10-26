@@ -344,13 +344,47 @@ textarea.field{min-height:92px;resize:vertical;line-height:1.5}
 .data-card h2{font-size:17px;font-weight:600}
 .data-card p{color:var(--ink-2);max-width:64ch}
 
+/* ================= SEARCH ================= */
+.search-trigger{flex:1 1 auto;max-width:400px;min-width:0;display:flex;align-items:center;gap:10px;height:42px;padding:0 10px 0 14px;border:1px solid var(--line);border-radius:10px;background:var(--paper);color:var(--ink-3);font-size:14.5px;transition:border-color .15s}
+.search-trigger:hover{border-color:var(--ink-3);color:var(--ink-2)}
+.search-trigger svg{flex-shrink:0}
+.search-ph{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.search-kbd{margin-left:auto;font:inherit;font-size:12px;line-height:20px;border:1px solid var(--line);border-radius:5px;padding:0 7px;color:var(--ink-3);background:var(--surface)}
+@media (hover:none){.search-kbd{display:none}}
+.search-wrap{position:fixed;inset:0;z-index:70;background:rgba(14,26,20,.42);display:flex;justify-content:center;align-items:flex-start;padding:9vh 16px 16px}
+.search-box{width:100%;max-width:680px;background:var(--surface);border-radius:14px;box-shadow:0 24px 60px rgba(14,26,20,.28);display:flex;flex-direction:column;max-height:78vh;overflow:hidden}
+.search-in{display:flex;align-items:center;gap:10px;padding:6px 8px 6px 18px;border-bottom:1px solid var(--line);color:var(--ink-3)}
+.search-in input{flex:1;min-width:0;border:0;outline:0;background:transparent;font-size:18px;height:52px;color:var(--ink)}
+.search-in input::placeholder{color:var(--ink-3)}
+.search-in input::-webkit-search-cancel-button{-webkit-appearance:none;appearance:none}
+.search-clear{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;color:var(--ink-3);flex-shrink:0}
+.search-clear:hover{background:var(--line-2);color:var(--ink)}
+.search-res{overflow-y:auto;padding:6px 8px 10px;-webkit-overflow-scrolling:touch}
+.sr-h{font-size:13px;color:var(--ink-3);padding:10px 12px 6px}
+.sr{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 16px;align-items:center;width:100%;padding:10px 12px;border-radius:8px;text-align:left}
+.sr.on{background:var(--green-hover)}
+@media (hover:hover){.sr:hover{background:var(--green-hover)}}
+.sr-t{font-weight:500;line-height:1.4}
+.sr-s{grid-column:1;font-size:13px;color:var(--ink-2);display:flex;flex-wrap:wrap;gap:2px 12px;line-height:1.45}
+.sr-x{grid-column:1;font-size:13px;color:var(--ink-3);line-height:1.45;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sr-k{grid-row:1 / span 3;grid-column:2;font-size:12.5px;color:var(--ink-3);white-space:nowrap}
+.sr-empty{padding:28px 16px;text-align:center;color:var(--ink-2)}
+.search-box mark{background:#F1E3B8;color:inherit;border-radius:2px;padding:0 1px}
+.search-foot{border-top:1px solid var(--line-2);padding:8px 18px;font-size:12.5px;color:var(--ink-3)}
+@media (hover:none){.search-foot{display:none}}
+
 /* ================= TOAST ================= */
 .toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,16px);background:var(--ink);color:#fff;padding:12px 18px;border-radius:10px;font-size:14.5px;z-index:90;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;max-width:calc(100vw - 32px);box-shadow:0 10px 30px rgba(0,0,0,.2)}
 .toast.show{opacity:1;transform:translate(-50%,0)}
 
 /* ================= RESPONSIVE ================= */
+@media (max-width:1100px){
+  .view-chip{display:none}
+}
 @media (max-width:900px){
   .logo-h{height:44px}
+  .search-trigger{flex:0 0 42px;width:42px;padding:0;justify-content:center;margin-left:auto}
+  .search-ph,.search-kbd{display:none}
 }
 @media (max-width:960px){
   .sp-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
@@ -385,10 +419,13 @@ textarea.field{min-height:92px;resize:vertical;line-height:1.5}
   .wrap{padding:0 16px}
   .tc-side{margin:0 -16px;padding:0 16px}
   .brand-en{display:none}
-  .brand-ar{font-size:13.5px}
+  .brand-ar{font-size:12.5px;white-space:normal;line-height:1.3;max-width:10em}
+  .is-team .brand-txt,.is-team .brand-div{display:none}
   .logo-h{display:none}
   .logo-m{display:block;height:36px}
   .hide-sm{display:none}
+  .search-wrap{padding:0}
+  .search-box{max-width:none;max-height:none;height:100%;border-radius:0}
   .brand{gap:10px}
   .view-chip{display:none}
   .sp-grid{grid-template-columns:1fr}
@@ -467,6 +504,9 @@ textarea.field{min-height:92px;resize:vertical;line-height:1.5}
           <p class="brand-en">Executive Dashboard</p>
         </div>
       </div>
+      <button type="button" class="search-trigger" id="searchBtn" aria-label="Search" aria-haspopup="dialog">
+        <svg width="18" height="18" viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.75" stroke="currentColor" stroke-width="1.7" fill="none"/><path d="m13 13 4.25 4.25" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg><span class="search-ph">Search meetings, files, events, people</span><kbd class="search-kbd">/</kbd>
+      </button>
       <div class="top-right">
         <span class="view-chip" id="viewChip"></span>
         <button class="btn btn-quiet" id="previewBtn" type="button" hidden>Preview<span class="hide-sm">HRH view</span></button>
@@ -574,6 +614,20 @@ textarea.field{min-height:92px;resize:vertical;line-height:1.5}
       <button class="btn btn-quiet" type="button" id="askCancel">Cancel</button>
       <button class="btn btn-primary" type="button" id="askOk">Send</button>
     </div>
+  </div>
+</div>
+
+<!-- Search -->
+<div class="search-wrap" id="searchWrap" hidden>
+  <div class="search-box" role="dialog" aria-modal="true" aria-label="Search">
+    <div class="search-in">
+      <svg width="18" height="18" viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.75" stroke="currentColor" stroke-width="1.7" fill="none"/><path d="m13 13 4.25 4.25" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+      <input id="searchInput" type="search" dir="auto" placeholder="Search everything" autocomplete="off" autocorrect="off" spellcheck="false" enterkeyhint="go" role="combobox" aria-expanded="true" aria-controls="searchList" aria-autocomplete="list">
+      <button type="button" class="search-clear" id="searchClear" aria-label="Clear search" hidden><svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M3 3l8 8M11 3l-8 8" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></button>
+      <button type="button" class="btn btn-quiet" id="searchClose">Close</button>
+    </div>
+    <div class="search-res" id="searchList" role="listbox" aria-label="Results"></div>
+    <p class="search-foot">Use the arrow keys to move, Enter to open, Esc to close.</p>
   </div>
 </div>
 
@@ -836,6 +890,7 @@ function enter(view) {
 function applyView() {
   const hrhVisible = VIEW === 'hrh' || PREVIEW;
   $('#hrhView').hidden = !hrhVisible;
+  $('#app').classList.toggle('is-team', !hrhVisible);
   $('#teamView').hidden = hrhVisible;
   $('#previewBar').hidden = !PREVIEW;
   $('#previewBtn').hidden = !(VIEW === 'team' && !PREVIEW);
@@ -1104,7 +1159,7 @@ function metaPairs(col, x) {
 }
 function docsHtml(links) {
   if (!links || !links.length) return '';
-  return `<div class="d-block"><h3>Documents and links</h3><div class="docs">${links.map(l => {
+  return `<div class="d-block" id="dDocs"><h3>Documents and links</h3><div class="docs">${links.map(l => {
     const kind = /\.pdf($|\?)/i.test(l.url) ? 'PDF' : /docx?($|\?)/i.test(l.url) ? 'DOC' : /pptx?($|\?)/i.test(l.url) ? 'PPT' : 'LINK';
     return l.url
       ? `<a class="doc" href="${h(l.url)}" target="_blank" rel="noopener"><span class="doc-k">${kind}</span>${h(l.label || l.url)}</a>`
@@ -1140,7 +1195,7 @@ function renderDrawer() {
       <p class="decide-st">${st}</p>
       <div class="btn-row">${actionButtons(col, x)}</div>
     </div>
-    <div class="d-block">
+    <div class="d-block" id="dNotes">
       <h3>Notes with the office</h3>
       ${threadHtml(key)}
       <div class="note-box">
@@ -1438,9 +1493,205 @@ $('#askWrap').addEventListener('keydown', e => { if (e.key === 'Enter' && e.targ
 
 document.addEventListener('keydown', e => {
   if (e.key !== 'Escape') return;
-  if (!$('#askWrap').hidden) closeAsk();
+  if (!$('#searchWrap').hidden) closeSearch();
+  else if (!$('#askWrap').hidden) closeAsk();
   else if (!$('#editorWrap').hidden) closeEditor();
   else if (CURRENT) closeDrawer();
+});
+
+/* ================= SEARCH =================
+   Searches every item, its documents, notes and HRH decisions, plus the
+   pages themselves. Arabic is normalised so spelling variants still match. */
+const SEC_ID = { schedule:'sec-schedule', urgent:'sec-urgent', fyi:'sec-fyi', bc:'sec-bc', events:'sec-events', sport:'sec-sport', news:'sec-news' };
+const SYNONYMS = {
+  schedule:'calendar meetings agenda diary today تقويم اجتماعات مواعيد',
+  urgent:'approvals decisions signatures pending موافقات قرارات توقيع',
+  fyi:'updates information briefings تحديثات',
+  bc:'boards committees projects working groups taskforce مجالس لجان مشاريع',
+  events:'invitations conferences rsvp engagements مؤتمرات',
+  sport:'sports matches tournaments games مباريات بطولات',
+  news:'bulletin headlines press أخبار',
+  activity:'hrh activity decisions notes log history نشاط',
+  data:'backup reset export import بيانات'
+};
+const TYPE_LABEL = { schedule:'Meeting', urgent:'Urgent action', fyi:'FYI', bc:'B&C', sport:'Sports event', news:'News' };
+const typeOf = (col, x) => col === 'events' ? (x.kind || 'Event') : TYPE_LABEL[col];
+const norm = s => String(s ?? '').toLowerCase()
+  .replace(/[ً-ٰٟـ]/g, '')
+  .replace(/[إأآٱ]/g, 'ا').replace(/ى/g, 'ي').replace(/ة/g, 'ه').replace(/ؤ/g, 'و').replace(/ئ/g, 'ي')
+  .replace(/[٠-٩]/g, d => String(d.charCodeAt(0) - 0x660))
+  .replace(/[–—]/g, '-');
+const MONTHS_FULL = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+function dateWords(d) {
+  if (!d || !/^\d{4}-\d\d-\d\d/.test(d)) return '';
+  const x = parseDay(d.slice(0, 10));
+  const rel = Math.round((x - parseDay(todayIso())) / 86400000);
+  return [fmtDay(d.slice(0, 10)), fmtDayShort(d.slice(0, 10)), MONTHS_FULL[x.getMonth()], ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][x.getDay()],
+          rel === 0 ? 'today' : rel === 1 ? 'tomorrow' : ''].join(' ');
+}
+function itemFields(col, x) {
+  const f = [];
+  const push = (label, v) => { if (Array.isArray(v)) v = v.join(', '); if (v !== '' && v != null) f.push([label, String(v)]); };
+  push('Location', x.location); push('From', x.from); push('Source', x.source); push('Chair', x.chair); push('Venue', x.venue);
+  push('Role', x.role); push('Sport', x.sport); push('Country', x.country); push('Category', x.category); push('Severity', x.severity);
+  push('Status', x.status); push('Standing', x.standing); push('Tags', x.tags); push('Topics', x.topics); push('Coverage', x.geo);
+  push('Summary', x.summary); push('Brief', x.brief); push('Overview', x.overview); push('Detail', x.body);
+  push('Agenda', x.agenda); push('Next steps', x.nextSteps);
+  const r = resp(col, x.id); if (r) { push('HRH decision', r.label); push('HRH note', r.note); }
+  return f;
+}
+function buildIndex(team) {
+  const out = [];
+  const pageCols = Object.keys(COLS).concat(team ? ['activity', 'data'] : []);
+  pageCols.forEach(c => {
+    const label = c === 'activity' ? 'HRH activity' : c === 'data' ? 'Data' : COLS[c].label;
+    const ar = COLS[c] ? COLS[c].ar : (c === 'activity' ? 'نشاط سموه' : 'البيانات');
+    out.push({ type:'page', col:c, title:label, ar, hayT:norm(label + ' ' + ar), hay:norm(SYNONYMS[c] || '') });
+  });
+  Object.keys(COLS).forEach(col => (S[col] || []).forEach(x => {
+    const fields = itemFields(col, x);
+    const dates = [x.date, x.endDate, x.nextSession, x.rsvpBy, x.deadline, x.at].map(dateWords).join(' ');
+    out.push({ type:'item', col, id:x.id, x, title:x.title, fields,
+      hayT:norm(x.title), hay:norm(fields.map(f => f[1]).join(' ') + ' ' + dates + ' ' + typeOf(col, x) + ' ' + COLS[col].label + ' ' + COLS[col].ar + ' ' + (x.start || '')) });
+    (x.links || []).forEach((l, i) => out.push({ type:'doc', col, id:x.id, x, title:l.label || l.url, url:l.url,
+      hayT:norm(l.label), hay:norm(l.url + ' document file attachment ملف مرفق ' + x.title) }));
+  }));
+  S.comments.forEach(cm => {
+    const [col, id] = cm.key.split(':'); const x = find(col, id); if (!x) return;
+    out.push({ type:'note', col, id, x, title:cm.text, by:cm.by, at:cm.at, hayT:norm(cm.text), hay:norm('note ' + cm.by + ' ' + x.title) });
+  });
+  return out;
+}
+const escRe = s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+function hl(text, toks) {
+  let out = h(text);
+  toks.forEach(t => { if (t.length > 0) out = out.replace(new RegExp('(' + escRe(h(t)) + ')', 'gi'), '<mark>$1</mark>'); });
+  return out;
+}
+function snippet(fields, rawToks, normToks) {
+  for (const [label, v] of fields) {
+    if (['Location','Venue','Source','From'].includes(label)) continue;
+    const nv = norm(v);
+    if (normToks.some(t => nv.includes(t))) {
+      const low = v.toLowerCase(); let i = -1;
+      for (const t of rawToks) { i = low.indexOf(t.toLowerCase()); if (i >= 0) break; }
+      let txt = v;
+      if (i > 40) txt = '…' + v.slice(i - 30);
+      return { label, txt };
+    }
+  }
+  return null;
+}
+let SR = [], SR_ON = 0;
+function runSearch() {
+  const q = $('#searchInput').value.trim();
+  $('#searchClear').hidden = !$('#searchInput').value;
+  const team = VIEW === 'team' && !PREVIEW;
+  const box = $('#searchList');
+  const idx = buildIndex(team);
+  if (!q) {
+    SR = idx.filter(e => e.type === 'page');
+    SR_ON = 0;
+    box.innerHTML = `<p class="sr-h">Go to</p>` + SR.map((e, i) => srRow(e, i, [])).join('');
+    return;
+  }
+  const rawToks = q.split(/\s+/).filter(Boolean);
+  const toks = rawToks.map(norm).filter(Boolean);
+  const scored = [];
+  idx.forEach(e => {
+    let score = 0;
+    for (const t of toks) {
+      if (e.hayT.includes(t)) score += (e.hayT.startsWith(t) || e.hayT.includes(' ' + t)) ? 12 : 8;
+      else if (e.hay.includes(t)) score += 2;
+      else return;
+    }
+    score += { page:4, item:3, doc:1, note:0 }[e.type];
+    scored.push([score, e]);
+  });
+  scored.sort((a, b) => b[0] - a[0]);
+  SR = scored.slice(0, 40).map(s => s[1]);
+  SR_ON = 0;
+  if (!SR.length) { box.innerHTML = `<p class="sr-empty">No matches for “${h(q)}”. Try a name, place, date or document.</p>`; return; }
+  box.innerHTML = `<p class="sr-h">${plural(scored.length, 'result', 'results')}${scored.length > 40 ? ', showing the top 40' : ''}</p>` + SR.map((e, i) => srRow(e, i, rawToks, toks)).join('');
+}
+function srMeta(col, x) {
+  const m = [];
+  if (col === 'schedule') m.push(fmtDayShort(x.date) + ', ' + x.start, x.location);
+  else if (col === 'urgent') m.push(dueText(x.deadline).t, x.from);
+  else if (col === 'fyi' || col === 'news') m.push(x.source, rel(x.at));
+  else if (col === 'bc') m.push(x.status, x.nextSession ? 'Next session ' + fmtDayShort(x.nextSession) : '');
+  else m.push(fmtRange(x.date, x.endDate), x.location || x.venue);
+  return m.filter(Boolean).map(s => `<span>${h(s)}</span>`).join('');
+}
+function srRow(e, i, rawToks, toks) {
+  const on = i === SR_ON ? ' on' : '';
+  const open = `<button type="button" class="sr${on}" role="option" id="sr${i}" data-sr="${i}" aria-selected="${i === SR_ON}">`;
+  if (e.type === 'page') return `${open}<span class="sr-t">${hl(e.title, rawToks)} <span class="ar" style="color:var(--ink-3);font-weight:400;margin-left:8px">${h(e.ar)}</span></span><span class="sr-k">Page</span></button>`;
+  if (e.type === 'doc') return `${open}<span class="sr-t">${hl(e.title, rawToks)}</span><span class="sr-s"><span>In ${h(e.x.title)}</span><span>${e.url ? 'Attached' : 'Not attached yet'}</span></span><span class="sr-k">Document</span></button>`;
+  if (e.type === 'note') return `${open}<span class="sr-t">${hl(e.title.length > 120 ? e.title.slice(0, 120) + '…' : e.title, rawToks)}</span><span class="sr-s"><span>${e.by === 'HRH' ? 'HRH' : 'Executive Office'}, ${h(stamp(e.at))}</span><span>On ${h(e.x.title)}</span></span><span class="sr-k">Note</span></button>`;
+  const r = resp(e.col, e.id);
+  const sn = toks && toks.length && !toks.every(t => e.hayT.includes(t)) ? snippet(e.fields, rawToks, toks) : null;
+  return `${open}<span class="sr-t">${hl(e.title, rawToks)}</span>
+    <span class="sr-s">${srMeta(e.col, e.x)}${r ? `<span style="color:var(--green-2)">${h(r.label)}</span>` : ''}</span>
+    ${sn ? `<span class="sr-x">${h(sn.label)}: ${hl(sn.txt, rawToks)}</span>` : ''}
+    <span class="sr-k">${h(typeOf(e.col, e.x))}</span></button>`;
+}
+function setActive(i) {
+  if (!SR.length) return;
+  SR_ON = (i + SR.length) % SR.length;
+  document.querySelectorAll('#searchList .sr').forEach((b, j) => { b.classList.toggle('on', j === SR_ON); b.setAttribute('aria-selected', j === SR_ON); });
+  const el = document.getElementById('sr' + SR_ON); if (el) el.scrollIntoView({ block: 'nearest' });
+  $('#searchInput').setAttribute('aria-activedescendant', 'sr' + SR_ON);
+}
+function openSearch() {
+  if (!VIEW) return;
+  $('#searchWrap').hidden = false;
+  document.body.style.overflow = 'hidden';
+  const inp = $('#searchInput'); inp.value = ''; runSearch();
+  setTimeout(() => inp.focus(), 20);
+}
+function closeSearch() {
+  $('#searchWrap').hidden = true;
+  if (!CURRENT && $('#editorWrap').hidden) document.body.style.overflow = '';
+}
+function goToResult(e) {
+  closeSearch();
+  const team = VIEW === 'team' && !PREVIEW;
+  if (team) {
+    if (!$('#editorWrap').hidden) closeEditor();
+    TAB = e.col; renderTeam(); window.scrollTo(0, 0);
+    if (e.type !== 'page') openEditor(e.col, e.id);
+    return;
+  }
+  if (e.type === 'page') {
+    if (CURRENT) closeDrawer();
+    const sec = document.getElementById(SEC_ID[e.col]); if (sec) sec.scrollIntoView({ behavior: 'smooth' });
+    return;
+  }
+  if (e.col === 'schedule' && e.x.date) {
+    const diff = Math.round((parseDay(e.x.date) - parseDay(todayIso())) / 86400000);
+    if (diff >= 0 && diff < 7) { SEL_DAY = e.x.date; renderSchedule(); }
+  }
+  openItem(e.col, e.id);
+  const target = e.type === 'doc' ? '#dDocs' : e.type === 'note' ? '#dNotes' : null;
+  if (target) setTimeout(() => { const t = $(target); if (t) t.scrollIntoView({ block: 'start', behavior: 'smooth' }); }, 120);
+}
+$('#searchBtn').addEventListener('click', openSearch);
+$('#searchClose').addEventListener('click', closeSearch);
+$('#searchClear').addEventListener('click', () => { $('#searchInput').value = ''; runSearch(); $('#searchInput').focus(); });
+$('#searchWrap').addEventListener('click', e => { if (e.target.id === 'searchWrap') closeSearch(); });
+$('#searchInput').addEventListener('input', runSearch);
+$('#searchInput').addEventListener('keydown', e => {
+  if (e.key === 'ArrowDown') { e.preventDefault(); setActive(SR_ON + 1); }
+  else if (e.key === 'ArrowUp') { e.preventDefault(); setActive(SR_ON - 1); }
+  else if (e.key === 'Enter') { e.preventDefault(); if (SR[SR_ON]) goToResult(SR[SR_ON]); }
+});
+$('#searchList').addEventListener('click', e => { const b = e.target.closest('[data-sr]'); if (b) goToResult(SR[+b.dataset.sr]); });
+document.addEventListener('keydown', e => {
+  if (!VIEW || !$('#searchWrap').hidden) return;
+  const typing = /INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName) || document.activeElement.isContentEditable;
+  if ((e.key === 'k' || e.key === 'K') && (e.metaKey || e.ctrlKey)) { e.preventDefault(); openSearch(); }
+  else if (e.key === '/' && !typing && $('#askWrap').hidden && $('#editorWrap').hidden) { e.preventDefault(); openSearch(); }
 });
 
 /* ---------- render everything ---------- */
